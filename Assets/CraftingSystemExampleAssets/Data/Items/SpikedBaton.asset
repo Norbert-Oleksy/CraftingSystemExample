@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a585045a8b8f63649b4a7c0bf61bbde1, type: 3}
-  m_Name: Iron
+  m_Name: SpikedBaton
   m_EditorClassIdentifier: 
-  _itemId: Ix0001
-  _name: Iron
-  _description: Iron
+  _itemId: Ix0004
+  _name: Spiked Baton
+  _description: Spiked Baton
   _prefab: {fileID: 0}

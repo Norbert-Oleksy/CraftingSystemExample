@@ -1,0 +1,13 @@
+fileFormatVersion: 2
+guid: c571581ce385cb64aba44de5fea9204b
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - _craftingDataBase: {fileID: 11400000, guid: eed31620ad0cb4b4bb4d91eaeeb27827,
+      type: 2}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
