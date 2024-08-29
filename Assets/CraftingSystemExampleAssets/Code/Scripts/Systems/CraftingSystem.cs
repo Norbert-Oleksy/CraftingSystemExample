@@ -31,13 +31,13 @@ public class CraftingSystem : MonoBehaviour
     /// <param name="recipe">Executed crafting recipe</param>
     public void CraftingProcess(Inventory inventory, CraftingRecipe recipe)
     {
-        if(!HasRequiredItems(inventory,recipe.CostOfCraft)) return;
+        if(inventory.HasAItems(recipe.CostOfCraft)) return;
 
-        UpdateInventory(inventory,recipe.CostOfCraft,false);
+        inventory.UpdateInventory(recipe.CostOfCraft,false);
 
         if (IsSuccess(recipe.SuccessChance))
         {
-            UpdateInventory(inventory, recipe.ResoultOfCraft, true);
+            inventory.UpdateInventory(recipe.ResoultOfCraft, true);
             SuccessfullyCraftingOperation();
         }
         else
@@ -45,36 +45,6 @@ public class CraftingSystem : MonoBehaviour
             FailedCraftingOperation();
         }
         OnDoneCrafting?.Invoke();
-    }
-
-    public bool HasRequiredItems(Inventory inventory, List<ItemStack> requiedItems)
-    {
-        foreach (var item in requiedItems) 
-        {
-            if(!inventory.HasAItem(item.item, item.amount)) return false;
-        }
-        return true;
-    }
-
-    /// <summary>
-    /// Updates the player's inventory by either adding or removing items
-    /// </summary>
-    /// <param name="inventory">The inventory that function operate on</param>
-    /// <param name="updateItems">The list of items and their amounts to add or remove</param>
-    /// <param name="addItem">Determines whether to add (true) or remove (false) the items from the inventory</param>
-    public void UpdateInventory(Inventory inventory, List<ItemStack> updateItems, bool addItem)
-    {
-        foreach (var item in updateItems)
-        {
-            if (addItem)
-            {
-                inventory.AddItem(item.item,item.amount);
-            }
-            else
-            {
-                inventory.RemoveItem(item.item, item.amount);
-            }
-        }
     }
 
     private bool IsSuccess(float chance)

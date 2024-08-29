@@ -52,5 +52,39 @@ public class Inventory : MonoBehaviour
     {
         return Items.ContainsKey(item) && _items[item] >= amount;
     }
+
+    /// <summary>
+    /// Does the same thing as HasAItem but for list of items
+    /// </summary>
+    /// <param name="requiedItems"></param>
+    /// <returns></returns>
+    public bool HasAItems(List<ItemStack> requiedItems)
+    {
+        foreach (var item in requiedItems)
+        {
+            if (!HasAItem(item.item, item.amount)) return false;
+        }
+        return true;
+    }
+
+    /// <summary>
+    /// Updates the player's inventory by either adding or removing items
+    /// </summary>
+    /// <param name="updateItems">The list of items and their amounts to add or remove</param>
+    /// <param name="addItem">Determines whether to add (true) or remove (false) the items from the inventory</param>
+    public void UpdateInventory(List<ItemStack> updateItems, bool addItem)
+    {
+        foreach (var item in updateItems)
+        {
+            if (addItem)
+            {
+                AddItem(item.item, item.amount);
+            }
+            else
+            {
+                RemoveItem(item.item, item.amount);
+            }
+        }
+    }
     #endregion
 }
