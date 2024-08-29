@@ -21,7 +21,7 @@ public class Inventory : MonoBehaviour
     public void DropItem(Item item, int amount = 1)
     {
         if(!Items.ContainsKey(item)) return;
-        //Add method that spawn object in the scene
+        SpawnObjectInFrontOfPlayer(item.Prefab).GetComponent<PickUpItem>().SetAmount(amount);
         RemoveItem(item, amount );
     }
 
@@ -85,6 +85,13 @@ public class Inventory : MonoBehaviour
                 RemoveItem(item.item, item.amount);
             }
         }
+    }
+
+    private GameObject SpawnObjectInFrontOfPlayer(GameObject prefab, float distanceInFront = 0.5f)
+    {
+        Vector3 spawnPosition = transform.position + transform.forward * distanceInFront;
+
+        return Instantiate(prefab, spawnPosition, Quaternion.identity);
     }
     #endregion
 }
