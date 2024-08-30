@@ -22,8 +22,9 @@ public class InputManager : MonoBehaviour
     public Action OnInventoryKeyInput;
     #endregion
 
-    #region
+    #region Variables
     private Vector3 movement;
+    public bool inventoryOpen = false;
     #endregion
     private void MovementInput()
     {
@@ -52,12 +53,12 @@ public class InputManager : MonoBehaviour
 
     #region Unity-API
     void Update()
-    {
+    {        
+        if (Input.GetKeyDown(inventoryKey)) OnInventoryKeyInput?.Invoke();
+        if(inventoryOpen) return;
         MovementInput();
         MouseInput();
-
         if (Input.GetKeyDown(interactionKey)) OnInteractionKeyInput?.Invoke();
-        if (Input.GetKeyDown(inventoryKey)) OnInventoryKeyInput?.Invoke();
     }
     #endregion
 }
