@@ -15,4 +15,4 @@ MonoBehaviour:
   _itemId: Ix0001
   _name: Iron
   _description: Iron
-  _prefab: {fileID: 0}
+  _prefab: {fileID: 199617437860369003, guid: 6d258f6e791100040800e37bfe1eb672, type: 3}
