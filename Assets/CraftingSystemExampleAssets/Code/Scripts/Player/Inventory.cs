@@ -39,7 +39,7 @@ public class Inventory : MonoBehaviour
             return;
         }
         _items[item] += amount;
-        if(_items[item]<0) _items.Remove(item);
+        if(_items[item]<=0) _items.Remove(item);
     }
 
     /// <summary>

@@ -18,6 +18,7 @@ public class UIInventoryMenu : MonoBehaviour
 
     #region Variables
     private Inventory inventory;
+    private List<UICraftingRecipeDisplay> listRecipeDisplays = new List<UICraftingRecipeDisplay>();
     #endregion
 
     #region Methods
@@ -27,6 +28,7 @@ public class UIInventoryMenu : MonoBehaviour
         craftingPage.SetActive(false);
         inventory = GameManager.instance.ReferenceToPlayer.Inventory;
         UpdateItemListDisplay();
+        LoadRecipesListDisplay();
     }
 
     public void ChangePage(bool isInvenotryPage)
@@ -58,23 +60,41 @@ public class UIInventoryMenu : MonoBehaviour
 
     private void SpawnItemsToListDisplay()
     {
-        Debug.Log(inventory.Items.Count);
         foreach(var itemEntry in inventory.Items)
         {
-            GameObject infoMsg = Instantiate(inventoryItemDisplayPrefab);
-            infoMsg.transform.SetParent(itemsContent, false);
-            infoMsg.GetComponent<UIInventoryItemDisplay>().Initialization(this, new ItemStack(itemEntry.Key,itemEntry.Value));
+            GameObject itemDisplay = Instantiate(inventoryItemDisplayPrefab);
+            itemDisplay.transform.SetParent(itemsContent, false);
+            itemDisplay.GetComponent<UIInventoryItemDisplay>().Initialization(this, new ItemStack(itemEntry.Key,itemEntry.Value));
         }
     }
 
-    private void UpdateRecipesListDisplay()
+    public void UpdateRecipesListDisplay()
     {
-
+        foreach (var recipe in listRecipeDisplays)
+        {
+            recipe.CheckIfCanCraft(inventory);
+        }
     }
 
     private void LoadRecipesListDisplay()
     {
-
+        UICraftingRecipeDisplay[] list = recipesContent.GetComponentsInChildren<UICraftingRecipeDisplay>();
+        if (list.Length > 0)
+        {
+            foreach (UICraftingRecipeDisplay toRemove in list)
+            {
+                Destroy(toRemove.gameObject);
+            }
+        }
+        listRecipeDisplays.Clear();
+        foreach (var recipe in CraftingSystem.instance.CraftingDataBase)
+        {
+            GameObject recipeDisplay = Instantiate(craftingRecipeDisplayPrefab);
+            recipeDisplay.transform.SetParent(recipesContent, false);
+            UICraftingRecipeDisplay uiRecipeDisplay = recipeDisplay.GetComponent<UICraftingRecipeDisplay>();
+            uiRecipeDisplay.Initialization(this, recipe);
+            listRecipeDisplays.Add(uiRecipeDisplay);
+        }
     }
     #endregion
 
@@ -90,6 +110,16 @@ public class UIInventoryMenu : MonoBehaviour
     {
         Destroy(itemDisplay.gameObject);
     }
+    #endregion
+
+    #region Methods Crafting
+    public void CraftItem(UICraftingRecipeDisplay craftingRecipeDisplay)
+    {
+        CraftingSystem.instance.CraftingProcess(inventory,craftingRecipeDisplay.CraftingRecipe);
+        UpdateRecipesListDisplay();
+        UpdateItemListDisplay();
+    }
+
     #endregion
 
     #region Unity-Api

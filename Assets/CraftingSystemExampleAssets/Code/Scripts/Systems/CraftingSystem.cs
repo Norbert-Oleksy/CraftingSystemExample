@@ -15,7 +15,7 @@ public class CraftingSystem : MonoBehaviour
     #region Fields
     [Header("Crafting Recipes")]
     [SerializeField] private ListCraftingRecipes _craftingDataBase;
-    public ListCraftingRecipes CraftingDataBase { get { return _craftingDataBase; } }
+    public List<CraftingRecipe> CraftingDataBase { get { return _craftingDataBase.Recipes; } }
     [Space(10)]
     [Header("Events")]
     [SerializeField] private UnityEvent OnSuccesCrafting; // Do when item was successfully created
@@ -30,8 +30,8 @@ public class CraftingSystem : MonoBehaviour
     /// <param name="inventory">The inventory that function operate on</param>
     /// <param name="recipe">Executed crafting recipe</param>
     public void CraftingProcess(Inventory inventory, CraftingRecipe recipe)
-    {
-        if(inventory.HasAItems(recipe.CostOfCraft)) return;
+    {        
+        if(!inventory.HasAItems(recipe.CostOfCraft)) return;
 
         inventory.UpdateInventory(recipe.CostOfCraft,false);
 
