@@ -21,13 +21,15 @@ public class PlayerInteractor : MonoBehaviour
     #region Methods
     private void InteractWithTheObject()
     {
-        if(interactObj == null) return;
+        if (GameManager.instance.isPlayerControlDisabled) return;
+        if (interactObj == null) return;
         interactObj.Interact(this.gameObject);
+        interactObj = null;
     }
 
     private void CastInteractionRay()
     {
-        Ray ray = new Ray(interactorSource.position, interactorSource.up);
+        Ray ray = new Ray(interactorSource.position, interactorSource.forward);
         if (Physics.Raycast(ray,out RaycastHit hitInfo, interacRange))
         {
             if (hitInfo.collider.gameObject.TryGetComponent(out IInteractable terget))

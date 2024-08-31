@@ -17,6 +17,7 @@ public class CameraController : MonoBehaviour
     #region Methods
     private void RotateACamera(Vector3 rotation)
     {
+        if (GameManager.instance.isPlayerControlDisabled) return;
         curentRotation.y -= rotation.y * rotationSensitivity;
         curentRotation.y = Mathf.Clamp(curentRotation.y, -90.0f, 90.0f);
         transform.localEulerAngles = new Vector3(curentRotation.y,0f,0f);

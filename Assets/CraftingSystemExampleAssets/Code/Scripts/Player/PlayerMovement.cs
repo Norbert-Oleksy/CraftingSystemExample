@@ -26,6 +26,7 @@ public class PlayerMovement : MonoBehaviour
     #region Methods
     private void MoveAPlayer(Vector3 movement)
     {
+        if (GameManager.instance.isPlayerControlDisabled) return;
         Vector3 moveVectore = transform.TransformDirection(movement);
 
         curentMoveVelocity = Vector3.SmoothDamp(
@@ -40,6 +41,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void RotateAPlayer(Vector3 rotation)
     {
+        if (GameManager.instance.isPlayerControlDisabled) return;
         curentRotation.x += rotation.x * rotationSensitivity;
         transform.eulerAngles = new Vector3(0f, curentRotation.x, 0f);
     }

@@ -5,40 +5,28 @@ using UnityEngine.UI;
 
 public class UIInventoryMenu : MonoBehaviour
 {
-    [SerializeField] private InputManager inputManager;
-    [SerializeField] private GameObject inventoryMenu;
+    #region Fields
     [SerializeField] private GameObject inventoryPage;
     [SerializeField] private GameObject craftingPage;
 
     [SerializeField] private Transform itemsContent;
     [SerializeField] private Transform recipesContent;
+    [Header("Prefabs")]
+    [SerializeField] private GameObject inventoryItemDisplayPrefab;
+    [SerializeField] private GameObject craftingRecipeDisplayPrefab;
+    #endregion
 
-    private List<Button> inventoryItems;
-    private List<Button> craftingRecipes;
-    private void Awake()
-    {
-        inputManager.OnInventoryKeyInput += OpenCloseInventory;
-    }
+    #region Variables
+    private Inventory inventory;
+    #endregion
 
-    private void OpenCloseInventory()
-    {
-        if(inventoryMenu.activeSelf)
-        {
-            inventoryMenu.SetActive(false);
-            inputManager.inventoryOpen = false;
-        }
-        else
-        {
-            inputManager.inventoryOpen = true;
-            SetBasicConfiguration();
-        }
-    }
-
+    #region Methods
     private void SetBasicConfiguration()
     {
-        inventoryMenu.SetActive(true);
         inventoryPage.SetActive(true);
         craftingPage.SetActive(false);
+        inventory = GameManager.instance.ReferenceToPlayer.Inventory;
+        UpdateItemListDisplay();
     }
 
     public void ChangePage(bool isInvenotryPage)
@@ -53,4 +41,61 @@ public class UIInventoryMenu : MonoBehaviour
             craftingPage.SetActive(true);
         }
     }
+
+    private void UpdateItemListDisplay()
+    {
+        UIInventoryItemDisplay[] list = itemsContent.GetComponentsInChildren<UIInventoryItemDisplay>();
+        if(list.Length > 0 )
+        {
+            foreach( UIInventoryItemDisplay toRemove in list )
+            {
+                RemoveItemDisplay(toRemove);
+            }
+        }
+        SpawnItemsToListDisplay();
+       
+    }
+
+    private void SpawnItemsToListDisplay()
+    {
+        Debug.Log(inventory.Items.Count);
+        foreach(var itemEntry in inventory.Items)
+        {
+            GameObject infoMsg = Instantiate(inventoryItemDisplayPrefab);
+            infoMsg.transform.SetParent(itemsContent, false);
+            infoMsg.GetComponent<UIInventoryItemDisplay>().Initialization(this, new ItemStack(itemEntry.Key,itemEntry.Value));
+        }
+    }
+
+    private void UpdateRecipesListDisplay()
+    {
+
+    }
+
+    private void LoadRecipesListDisplay()
+    {
+
+    }
+    #endregion
+
+    #region Methods Inventory
+    public void DropItem(UIInventoryItemDisplay dropItem)
+    {
+        int howMuch = 1;
+        inventory.DropItem(dropItem.Item.item, howMuch);
+        dropItem.UpdateItemAmmount(dropItem.Item.amount - howMuch);
+    }
+
+    public void RemoveItemDisplay(UIInventoryItemDisplay itemDisplay)
+    {
+        Destroy(itemDisplay.gameObject);
+    }
+    #endregion
+
+    #region Unity-Api
+    private void OnEnable()
+    {
+        SetBasicConfiguration();
+    }
+    #endregion
 }
